@@ -10,10 +10,9 @@ public interface FuncionarioRepository extends CrudRepository<Funcionario, Strin
 
     Funcionario findById(long id);
 
-    // busca
+
     Funcionario findByNome(String nome);
 
-    // para a busca
     @Query(value = "select u from Funcionario u where u.nome like %?1%")
     List<Funcionario> findByNomes(String nome);
 

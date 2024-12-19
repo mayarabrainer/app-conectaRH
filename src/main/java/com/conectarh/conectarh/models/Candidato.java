@@ -1,11 +1,9 @@
 package com.conectarh.conectarh.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 
+@Entity
 public class Candidato {
 
     @Id

@@ -15,7 +15,7 @@ public interface CandidatoRepository extends CrudRepository<Candidato, String> {
 
     Candidato findById(long id);
 
-    // para a busca
+
     @Query(value = "select u from Candidato u where u.nomeCandidato like %?1%")
     List<Candidato> findByNomesCandidatos(String nomeCandidato);
 }

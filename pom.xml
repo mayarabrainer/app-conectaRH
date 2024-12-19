@@ -8,11 +8,11 @@
 		<version>3.4.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.app.smarthrh</groupId>
-	<artifactId>smarthrh</artifactId>
+	<groupId>conectarh</groupId>
+	<artifactId>conectarh</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>smarthrh</name>
-	<description>Projeto SmartRH</description>
+	<name>conectarh</name>
+	<description>Projeto conectarh</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -74,7 +74,6 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.7.0</version>
 		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -82,6 +81,11 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.1.0</version>
 			</plugin>
 		</plugins>
 	</build>

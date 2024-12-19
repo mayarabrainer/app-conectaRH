@@ -1,8 +1,8 @@
 package com.conectarh.conectarh.controllers;
 
-import com.conectarh.conectarh.models.Dependentes;
+import com.conectarh.conectarh.models.Dependente;
 import com.conectarh.conectarh.models.Funcionario;
-import com.conectarh.conectarh.repository.DependentesRepository;
+import com.conectarh.conectarh.repository.DependenteRepository;
 import com.conectarh.conectarh.repository.FuncionarioRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +21,15 @@ public class FuncionarioController {
     private FuncionarioRepository fr;
 
     @Autowired
-    private DependentesRepository dr;
+    private DependenteRepository dr;
 
-    // chamo o form de casdatrar funcionários
-    @RequestMapping(value = "/cadastrarFuncionario", method = RequestMethod.GET)
+    // GET que chama o form para cadastrar funcionários
+    @RequestMapping("/cadastrarFuncionario")
     public String form() {
-        return "funcionario/formFuncionario";
+        return "funcionario/form-funcionario";
     }
 
-    // cadastra funcionários
+    // POST que cadastra funcionários
     @RequestMapping(value = "/cadastrarFuncionario", method = RequestMethod.POST)
     public String form(@Valid Funcionario funcionario, BindingResult result, RedirectAttributes attributes) {
 
@@ -43,54 +43,54 @@ public class FuncionarioController {
         return "redirect:/cadastrarFuncionario";
     }
 
-    // listar funcionário
+    // GET que lista funcionários
     @RequestMapping("/funcionarios")
     public ModelAndView listaFuncionarios() {
-        ModelAndView mv = new ModelAndView("funcionario/listaFuncionario");
+        ModelAndView mv = new ModelAndView("funcionario/lista-funcionario");
         Iterable<Funcionario> funcionarios = fr.findAll();
         mv.addObject("funcionarios", funcionarios);
         return mv;
     }
 
-    // listar dependentes
-    @RequestMapping(value = "/dependentes/{id}", method = RequestMethod.GET)
-    public ModelAndView dependentes(@PathVariable("id") long id) {
+    // GET que lista dependentes e detalhes dos funcionário
+    @RequestMapping("/detalhes-funcionario/{id}")
+    public ModelAndView detalhesFuncionario(@PathVariable("id") long id) {
         Funcionario funcionario = fr.findById(id);
-        ModelAndView mv = new ModelAndView("funcionario/dependentes");
+        ModelAndView mv = new ModelAndView("funcionario/detalhes-funcionario");
         mv.addObject("funcionarios", funcionario);
 
-        // lista de dependentes baseada no funcionário
-        Iterable<Dependentes> dependentes = dr.findByFuncionario(funcionario);
+        // lista de dependentes baseada no id do funcionário
+        Iterable<Dependente> dependentes = dr.findByFuncionario(funcionario);
         mv.addObject("dependentes", dependentes);
 
         return mv;
 
     }
 
-    // Adicionar dependentes
-    @RequestMapping(value="/dependentes/{id}", method = RequestMethod.POST)
-    public String dependentesPost(@PathVariable("id") long id, Dependentes dependentes, BindingResult result,
-                                  RedirectAttributes attributes) {
+    // POST que adiciona dependentes
+    @RequestMapping(value="/detalhes-funcionario/{id}", method = RequestMethod.POST)
+    public String detalhesFuncionarioPost(@PathVariable("id") long id, Dependente dependentes, BindingResult result,
+                                          RedirectAttributes attributes) {
 
         if(result.hasErrors()) {
             attributes.addFlashAttribute("mensagem", "Verifique os campos!");
-            return "redirect:/dependentes/{id}";
+            return "redirect:/detalhes-funcionario/{id}";
         }
 
         if(dr.findByCpf(dependentes.getCpf()) != null) {
             attributes.addFlashAttribute("mensagem_erro", "CPF duplicado");
-            return "redirect:/dependentes/{id}";
+            return "redirect:/detalhes-funcionario/{id}";
         }
 
         Funcionario funcionario = fr.findById(id);
         dependentes.setFuncionario(funcionario);
         dr.save(dependentes);
         attributes.addFlashAttribute("mensagem", "Dependente adicionado com sucesso");
-        return "redirect:/dependentes/{id}";
+        return "redirect:/detalhes-funcionario/{id}";
 
     }
 
-    //deleta funcionário
+    //GET que deleta funcionário
     @RequestMapping("/deletarFuncionario")
     public String deletarFuncionario(long id) {
         Funcionario funcionario = fr.findById(id);
@@ -100,8 +100,8 @@ public class FuncionarioController {
     }
 
     // Métodos que atualizam funcionário
-    //form
-    @RequestMapping(value="/editar-funcionario", method = RequestMethod.GET)
+    // GET que chama o FORM de edição do funcionário
+    @RequestMapping("/editar-funcionario")
     public ModelAndView editarFuncionario(long id) {
         Funcionario funcionario = fr.findById(id);
         ModelAndView mv = new ModelAndView("funcionario/update-funcionario");
@@ -109,7 +109,7 @@ public class FuncionarioController {
         return mv;
     }
 
-    // update funcionário
+    // POST que atualiza o funcionário
     @RequestMapping(value = "/editar-funcionario", method = RequestMethod.POST)
     public String updateFuncionario(@Valid Funcionario funcionario,  BindingResult result, RedirectAttributes attributes){
 
@@ -118,30 +118,20 @@ public class FuncionarioController {
 
         long idLong = funcionario.getId();
         String id = "" + idLong;
-        return "redirect:/dependentes/" + id;
+        return "redirect:/detalhes-funcionario/" + id;
 
     }
 
-    // deletar dependente
+    // GET que deleta dependente
     @RequestMapping("/deletarDependente")
     public String deletarDependente(String cpf) {
-        Dependentes dependente = dr.findByCpf(cpf);
+        Dependente dependente = dr.findByCpf(cpf);
 
         Funcionario funcionario = dependente.getFuncionario();
         String codigo = "" + funcionario.getId();
 
         dr.delete(dependente);
-        return "redirect:/dependentes/" + codigo;
+        return "redirect:/detalhes-funcionario/" + codigo;
 
     }
-
-
-
-
-
-
-
-
-
-
 }

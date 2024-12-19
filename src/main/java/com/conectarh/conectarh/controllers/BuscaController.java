@@ -1,7 +1,7 @@
 package com.conectarh.conectarh.controllers;
 
 import com.conectarh.conectarh.repository.CandidatoRepository;
-import com.conectarh.conectarh.repository.DependentesRepository;
+import com.conectarh.conectarh.repository.DependenteRepository;
 import com.conectarh.conectarh.repository.FuncionarioRepository;
 import com.conectarh.conectarh.repository.VagaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +21,13 @@ public class BuscaController {
     private VagaRepository vr;
 
     @Autowired
-    private DependentesRepository dr;
+    private DependenteRepository dr;
 
     @Autowired
     private CandidatoRepository cr;
 
     //GET
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping("/")
     public ModelAndView abrirIndex() {
         ModelAndView mv = new ModelAndView("index");
         return mv;

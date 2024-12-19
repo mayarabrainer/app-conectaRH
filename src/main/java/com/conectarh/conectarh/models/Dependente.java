@@ -3,7 +3,7 @@ package com.conectarh.conectarh.models;
 import jakarta.persistence.*;
 
 @Entity
-public class Dependentes {
+public class Dependente {
 
     @Id
     @GeneratedValue
